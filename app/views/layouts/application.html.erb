@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MusicApp</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <header>
+    <h1>Music App</h1>
+    <% if logged_in? %>
+    Hi <%= current_user.email %>!
+    <form action=<%= session_url %> method="post">
+      <input name="_method" type="hidden" value="delete" />
+      <input type="submit" value="Log out">
+      <input name="authenticity_token" type="hidden" value=<%=form_authenticity_token%>>
+    </form>
+    <%#= button_to("Logout!", session_url, method: :delete) %>
+    <% elsif !logged_in? && !/\/(users|session)\/new/.match?(request.env['PATH_INFO']) %>
+    <form action=<%= new_session_url %> method="get">
+      <input type="submit" value="Log in">
+      <input name="authenticity_token" type="hidden" value=<%=form_authenticity_token%>>
+    </form>
+    <% end %>
+    </header>
+
+
+    <%= yield %>
+  </body>
+</html>
