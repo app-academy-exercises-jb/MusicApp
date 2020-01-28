@@ -1,12 +1,15 @@
 class AlbumsController < ApplicationController
+  before_action :ensure_album, except: [:new, :create]
+
   def new
-    @album = Album.new
+    @band = Band.find(params.require(:band_id))
+    @album = Album.new(band_id: @band.id)
+    
     render :new
   end
 
   def create
     @album = Album.new(album_params)
-    
     if @album.save
       redirect_to album_url(@album)
     else
@@ -16,28 +19,19 @@ class AlbumsController < ApplicationController
   end
   
   def show
-    album()
-    return redirect_to(band_url(params.require(:id))) unless @album
     render :show
   end
 
   def edit
-    album()
-    return redirect_to(band_url(params.require(:id))) unless @album
-
     render :edit
   end
 
   def destroy
-    album()
-    return redirect_to(band_url(params.require(:id))) unless @album
     @album.destroy!
     redirect_to band_url(@album.band_id)
   end
 
   def update
-    album()
-    return redirect_to(band_url(params.require(:id))) unless @album
     if @album.update_attributes(album_params)
       redirect_to album_url(@album.id)
     else
@@ -47,6 +41,11 @@ class AlbumsController < ApplicationController
   end
 
   private
+  def ensure_album
+    album()
+    return redirect_to(band_url(params.require(:id))) unless @album
+  end
+
   def album
     @album ||= Album.find(params.require(:id))
   end

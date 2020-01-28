@@ -1,4 +1,6 @@
 class BandsController < ApplicationController
+  before_action :ensure_band, except: [:index, :create, :new]
+
   def index
     @bands = Band.all
     render :index
@@ -20,22 +22,14 @@ class BandsController < ApplicationController
   end
 
   def edit
-    band()
-    return redirect_to(bands_url) unless @band
-
     render :edit
   end
 
   def show
-    band()
-    return redirect_to(bands_url) unless @band
     render :show
   end
 
   def update
-    band()
-    return redirect_to(bands_url) unless @band
-
     @band.attributes = (band_params)
     if @band.save
       redirect_to band_url(@band)
@@ -46,14 +40,15 @@ class BandsController < ApplicationController
   end
 
   def destroy
-    band()
-    return redirect_to(bands_url) unless @band
-
     @band.destroy!
     redirect_to bands_url
   end
 
   private
+  def ensure_band
+    band()
+    return redirect_to(bands_url) unless @band
+  end
   def band
     @band ||= Band.find_by(id: params.require(:id))
   end
