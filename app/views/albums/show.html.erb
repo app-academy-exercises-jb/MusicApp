@@ -1,0 +1,14 @@
+<h1><%=@album.title%>'s Information</h1>
+
+<ul>
+  <%@album.attributes.each do |k,v|%>
+  <li><%=k%>: <%=v%></li>
+  <%end%>
+</ul>
+
+<form action="<%=edit_album_url(@album.id)%>" method="get">
+  <input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+  <input type="submit" value="Edit Album Info">
+</form>
+
+<%= button_to "Back to Band", band_url(Band.find_by(id: @album.band_id)), method: :get%>

@@ -1,3 +1,13 @@
 <h1><%=@band.name%></h1>
 
+<ul>
+<% Album.where(band_id: @band.id).each do |album| %>
+  <li><a href="<%=album_url(album)%>">
+    <%=album.title%></a>
+  </li>
+<% end%>
+</ul>
+
 <%= button_to "Edit Band", edit_band_url(@band), method: :get %>
+
+<%= button_to "Back to Bands", bands_url, method: :get%>
